@@ -15,7 +15,7 @@ import java.util.Map;
 @NoArgsConstructor
 @Getter
 @Setter
-public class GitLabProject extends AbstractModel {
+public class BitBucketProject extends AbstractModel {
 
     @JsonIgnore
     private String slug;

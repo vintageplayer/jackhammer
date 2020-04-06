@@ -10,7 +10,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class GitLabGroup extends AbstractModel {
+public class BitBucketGroup extends AbstractModel {
     @JsonIgnore
     private String links_avatar;
     @JsonIgnore
