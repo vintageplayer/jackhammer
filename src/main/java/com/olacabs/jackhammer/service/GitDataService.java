@@ -35,7 +35,7 @@ public class GitDataService extends AbstractDataService<Git> {
         if (dbGit == null) {
             git.setApiAccessToken(AES.encrypt(git.getApiAccessToken(),jackhammerConfiguration.getJwtConfiguration().getTokenSigningKey()));
             gitDAO.insert(git);
-            gitUtil.pullGitLabInfo();
+            gitUtil.pullGitRepos();
         }
         return dbGit;
     }
