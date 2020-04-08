@@ -24,6 +24,7 @@ public class BitBucketProject extends AbstractModel {
     @JsonIgnore
     private String created_on;
     @JsonIgnore
+    private String updated_on;
     @JsonIgnore
     private String description;
     @JsonProperty("public")
