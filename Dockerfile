@@ -22,6 +22,9 @@ RUN curl -sSL https://get.docker.com/ | sh
 RUN mkdir -p /home/src/jch_server
 ENV WORKSPACE /home/src/jch_server
 WORKDIR $WORKSPACE
+COPY pom.xml /home/src/jch_server/
+RUN mvn dependency:go-offline
+
 COPY . /home/src/jch_server/
 RUN mvn clean install
 EXPOSE 8080
