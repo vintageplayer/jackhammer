@@ -24,6 +24,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 import liquibase.util.file.FilenameUtils;
 
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 
 import com.olacabs.jackhammer.models.*;
 import com.olacabs.jackhammer.common.Constants;
@@ -66,6 +67,9 @@ public class ScanUtil {
 
     @Inject
     JackhammerConfiguration jackhammerConfiguration;
+
+    @Inject
+    GitUtil gitUtil;
 
     public void startScan(Scan scan) {
         try {
@@ -298,9 +302,15 @@ public class ScanUtil {
                 StringBuilder targetWithCredentials = new StringBuilder();
                 String repoUrlWithoutHttps = target.split(Constants.GIT_HTTPS)[1];
                 targetWithCredentials.append(Constants.GIT_HTTPS);
-                targetWithCredentials.append(git.getUserName());
-                targetWithCredentials.append(Constants.COLON);
-                targetWithCredentials.append(privateToken);
+                if (StringUtils.equals(git.getGitType().toLowerCase(), Constants.BITBUCKET)) {
+                   targetWithCredentials.append(Constants.X_TOKEN_AUTH);
+                   targetWithCredentials.append(Constants.COLON);
+                   targetWithCredentials.append(gitUtil.getBitBucketAccessToken(git.getUserName(),privateToken));
+                } else {
+                    targetWithCredentials.append(git.getUserName());
+                    targetWithCredentials.append(Constants.COLON);
+                    targetWithCredentials.append(privateToken);
+                }
                 targetWithCredentials.append(Constants.AT_THE_RATE);
                 targetWithCredentials.append(repoUrlWithoutHttps);
                 target = targetWithCredentials.toString();
