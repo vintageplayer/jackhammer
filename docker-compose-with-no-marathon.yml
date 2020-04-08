@@ -35,7 +35,7 @@ services:
    volumes:
      - /var/run/docker.sock:/var/run/docker.sock
   jch-client:
-    image: jackhammer/jackhammer-client
+    image: zeta_jackhammer-client:latest
     ports:
       - "5005:8080"
     links:
