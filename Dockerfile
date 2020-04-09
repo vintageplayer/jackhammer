@@ -24,6 +24,7 @@ ENV WORKSPACE /home/src/jch_server
 WORKDIR $WORKSPACE
 COPY pom.xml /home/src/jch_server/
 RUN mvn dependency:go-offline
+RUN mvn dependency:resolve-plugins
 
 COPY . /home/src/jch_server/
 RUN mvn clean install
