@@ -23,6 +23,7 @@ import javax.xml.bind.DatatypeConverter;
 
 import java.io.UnsupportedEncodingException;
 import java.util.*;
+import java.net.URLEncoder;
 import org.json.JSONObject;
 
 @AllArgsConstructor
@@ -227,10 +228,11 @@ public class GitUtil {
                 targetBuilder.append(git.getOrganizationName());
                 targetBuilder.append(Constants.GIT_PROJECTS_END_POINT);
 
-                while (true) {                                        
-                    WebTarget webTarget = ClientBuilder.newClient()
+                WebTarget webTarget = ClientBuilder.newClient()
                             .target(targetBuilder.toString())
                             .queryParam(Constants.ACCESS_TOKEN, accessToken);
+
+                while (true) {                                                            
                     Response response = webTarget.request(MediaType.APPLICATION_JSON).get();
                     String jsonString = response.readEntity(String.class);
                     JSONObject jsonResponse = new JSONObject(jsonString);
@@ -260,11 +262,11 @@ public class GitUtil {
                 for (BitBucketGroup bitBucketGroup : bitBucketGroups) {
                     List<BitBucketProject> bitBucketProjects = new ArrayList<BitBucketProject>();
 
-                    while (true) {
-                        WebTarget webTarget = ClientBuilder.newClient()
-                                .target(bitBucketGroup.getLinks_repositories())
-                                .queryParam(Constants.ACCESS_TOKEN, privateToken);
-                        
+                    webTarget = ClientBuilder.newClient()
+                                .target(bitBucketGroup.getLinks_repositories().replaceAll("\"","%22"))
+                                .queryParam(Constants.ACCESS_TOKEN, accessToken);
+
+                    while (true) {                       
                         Response response = webTarget.request(MediaType.APPLICATION_JSON).get();
                         String JsonString = response.readEntity(String.class);
                         JSONObject jsonResponse = new JSONObject(JsonString);
@@ -405,24 +407,18 @@ public class GitUtil {
         return gitHubGroups;
     }
 
-    public String getBitBucketAccessTokenStatic(String userName, String password){
-        String access_token = "<replace with a live access_token obtained via curl>";
-        return access_token;
-    }
-
     public String getBitBucketAccessToken(String userName, String password) {
         String access_token = null;
 
         try {
             StringBuilder endpointBuilder = new StringBuilder();
-            endpointBuilder.append(Constants.BITBUCKET_API_URL);
+            endpointBuilder.append(Constants.BITBUCKET_URL);
             endpointBuilder.append(Constants.BIT_BUCKET_ACCESS_TOKEN_END_POINT);
+
 
             WebTarget webTarget = ClientBuilder.newClient()
                     .target(endpointBuilder.toString());
 
-            log.info("Token Endpoint....{}:",endpointBuilder.toString());
-            log.info("Authentication Token....{}:",getBasicAuthentication(userName,password));
             MultivaluedMap<String, String> formData = new MultivaluedHashMap<String, String>();
             formData.putSingle(Constants.GRANT_TYPE,Constants.CLIENT_CREDENTIALS);
 
@@ -431,7 +427,6 @@ public class GitUtil {
                     .post(Entity.form(formData));
 
             String jsonString = response.readEntity(String.class);            
-            log.info("Token Response received....{}:",jsonString);
             JSONObject jsonResponse = new JSONObject(jsonString);
 
             access_token = jsonResponse.get(Constants.ACCESS_TOKEN).toString();

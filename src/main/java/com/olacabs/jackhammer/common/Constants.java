@@ -216,7 +216,7 @@ public class Constants {
     public static final String BIT_BUCKET_GROUPS_END_POINT = "/2.0/teams/";
     public static final String BIT_BUCKET_ACCESS_TOKEN_END_POINT = "/site/oauth2/access_token";
     public static final String GIT_LAB_GROUPS_END_POINT = "/api/v3/groups/";
-    public static final String GIT_PROJECTS_END_POINT = "/projects";
+    public static final String GIT_PROJECTS_END_POINT = "/projects/";
     public static final String PRIVATE_TOKEN = "private_token";
     public static final String ALL_AVAILABLE = "all_available";
     public static final String PAGE = "page";
@@ -259,7 +259,7 @@ public class Constants {
     public static  final String RESET_PASSWORD_API = "/api/v1/app/verify_reset_password_token";
     public static  final String JACKHAMMER = "Jackhammer";
     public static  final String GITHUB_API_URL = "https://api.github.com/";
-    public static  final String BITBUCKET_API_URL = "https://api.bitbucket.org/";
+    public static  final String BITBUCKET_API_URL = "https://api.bitbucket.org";
     public static  final String ACCESS_TOKEN = "access_token";
     public static  final String GRANT_TYPE = "grant_type";
     public static  final String CLIENT_CREDENTIALS = "client_credentials";
